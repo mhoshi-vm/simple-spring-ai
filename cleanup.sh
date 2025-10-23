@@ -10,4 +10,10 @@ cf apps | egrep -vw "prepush" | sed '1,3d' | awk '{print"cf delete -r -f "$1}' |
 find ~/Downloads -name "demo*" -maxdepth 1 -exec rm -rf {} \;
 find ~/Library/Application\ Support/JetBrains/ -name "*.http" -exec rm {} \;
 
+RECENT_PROJECTS=`find ~/Library/Application\ Support/JetBrains/ -name recentProjects.xml -exec ls -t {} \; | head -n 1`
+cp "$RECENT_PROJECTS" "$RECENT_PROJECTS.bk"
+cp "$RECENT_PROJECTS" "$RECENT_PROJECTS.tmp"
+
+xmlstarlet ed -d "//*[starts-with(@key,\"\$USER_HOME\$/Downloads/demo\")]" "$RECENT_PROJECTS.tmp" > "$RECENT_PROJECTS"
+
 curl https://prepush.app.tas.vpsmart.aws.lespaulstudioplus.info/clear
